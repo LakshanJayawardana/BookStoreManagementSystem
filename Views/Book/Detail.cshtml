@@ -1,0 +1,9 @@
+@model BooksEntity
+
+@{
+    ViewData["Title"] = "Books Page";
+}
+
+<h1>Book Details</h1>
+<li>Book title @Model.Title</li>
+<li>Publisher Name @Model.Publisher.PublisherName</li>

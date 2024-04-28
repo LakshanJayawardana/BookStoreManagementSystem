@@ -1,0 +1,46 @@
+@model List<BooksEntity>
+
+@{
+    ViewData["Title"] = "Books Page";
+}
+
+<h2></h2>
+<br>
+<div class="row">
+    <div class="col-md-12">
+        <a asp-action="Create" asp-controller="Book" class="btn btn-sucess">Create book</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Book Title</td>
+                    <td>ISBN</td>
+                    <td>Publication Date</td>
+                    <td>Publisher</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.ISBN</td>
+                        <td>@book.PublicationDate</td>
+                        <td>@book.PublisherId</td>
+                       
+
+                        <td>
+                            <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Book" asp-action="Detail" asp-route-id="@book.Id" class="btn btn-success">Details</a>
+                            <a asp-controller="Book" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
