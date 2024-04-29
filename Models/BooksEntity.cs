@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 namespace WebApplication1.Models;
 
 public class BooksEntity
@@ -19,4 +20,7 @@ public class BooksEntity
 
     public virtual ICollection<BookAuthorEntity>BookAuthors { get; set; }
     //public List<OrderLineEntity> OrderLine { get; set; }
+    public string AppUserId { get; set; }
+    public AppUserEntity? AppUser { get; set; }
+
 }

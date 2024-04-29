@@ -1,12 +1,12 @@
-// using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 namespace WebApplication1.Data;
-public class ApplicationDbContext:DbContext
+public class ApplicationDbContext : IdentityDbContext<AppUserEntity>
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
-    {       
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
     }
     public DbSet<BooksEntity> Books { get; set; }
     public DbSet<AuthorEntity> Authors { get; set; }
@@ -16,6 +16,7 @@ public class ApplicationDbContext:DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<BookAuthorEntity>().HasKey(ba => new { ba.BookId, ba.AuthorId });
 
         modelBuilder.Entity<BookAuthorEntity>()
@@ -28,7 +29,6 @@ public class ApplicationDbContext:DbContext
             .WithMany(a => a.BookAuthors)
             .HasForeignKey(ba => ba.AuthorId);
 
-        
     }
 }
 
