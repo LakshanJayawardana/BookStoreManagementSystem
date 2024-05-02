@@ -11,5 +11,6 @@ public class CustomerOrderEntity
     public List<OrderLineEntity> OrderLine { get; set; }
 
     public List<OrderHistoryEntity> OrderHistory { get; set; }
+    public CustomerEntity Customer { get; set; }
 
 }
