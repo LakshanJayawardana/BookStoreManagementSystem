@@ -270,10 +270,6 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ISBN")
                         .HasColumnType("nvarchar(max)");
 
@@ -297,13 +293,38 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
-
                     b.HasIndex("LanguageId");
 
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.CustomerOrderEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ShippingMethodId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShippingMethodId");
+
+                    b.ToTable("CustomerOrders");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.LanguageEntity", b =>
@@ -327,6 +348,84 @@ namespace WebApplication1.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.OrderHistoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerOrderId");
+
+                    b.HasIndex("OrderStatusId");
+
+                    b.ToTable("OrderHistories");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.OrderLineEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("CustomerOrderId");
+
+                    b.ToTable("OrderLines");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.OrderStatusEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("StatusValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatuses");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.PublisherEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -341,6 +440,26 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Publishers");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.ShippingMethodEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MethodName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShippingMethods");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -415,12 +534,6 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.BooksEntity", b =>
                 {
-                    b.HasOne("WebApplication1.Models.AppUserEntity", "AppUser")
-                        .WithMany("Books")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("WebApplication1.Models.LanguageEntity", "Language")
                         .WithMany("Books")
                         .HasForeignKey("LanguageId")
@@ -433,16 +546,58 @@ namespace WebApplication1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
-
                     b.Navigation("Language");
 
                     b.Navigation("Publisher");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.AppUserEntity", b =>
+            modelBuilder.Entity("WebApplication1.Models.CustomerOrderEntity", b =>
                 {
-                    b.Navigation("Books");
+                    b.HasOne("WebApplication1.Models.ShippingMethodEntity", "ShippingMethod")
+                        .WithMany("CustomerOrder")
+                        .HasForeignKey("ShippingMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ShippingMethod");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.OrderHistoryEntity", b =>
+                {
+                    b.HasOne("WebApplication1.Models.CustomerOrderEntity", "CustomerOrder")
+                        .WithMany("OrderHistory")
+                        .HasForeignKey("CustomerOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.Models.OrderStatusEntity", "OrderStatus")
+                        .WithMany("OrderHistories")
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomerOrder");
+
+                    b.Navigation("OrderStatus");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.OrderLineEntity", b =>
+                {
+                    b.HasOne("WebApplication1.Models.BooksEntity", "Book")
+                        .WithMany("OrderLine")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.Models.CustomerOrderEntity", "CustomerOrder")
+                        .WithMany("OrderLine")
+                        .HasForeignKey("CustomerOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("CustomerOrder");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.AuthorEntity", b =>
@@ -453,6 +608,15 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.BooksEntity", b =>
                 {
                     b.Navigation("BookAuthors");
+
+                    b.Navigation("OrderLine");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.CustomerOrderEntity", b =>
+                {
+                    b.Navigation("OrderHistory");
+
+                    b.Navigation("OrderLine");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.LanguageEntity", b =>
@@ -460,9 +624,19 @@ namespace WebApplication1.Migrations
                     b.Navigation("Books");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.OrderStatusEntity", b =>
+                {
+                    b.Navigation("OrderHistories");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.PublisherEntity", b =>
                 {
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.ShippingMethodEntity", b =>
+                {
+                    b.Navigation("CustomerOrder");
                 });
 #pragma warning restore 612, 618
         }
