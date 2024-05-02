@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUserEntity>
     public DbSet<ShippingMethodEntity> ShippingMethods { get; set; }
     public DbSet<OrderHistoryEntity> OrderHistories { get; set; }
     public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
+    public DbSet<CustomerEntity> Customers { get; set; }
     
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
