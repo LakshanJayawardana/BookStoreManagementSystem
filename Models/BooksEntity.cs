@@ -19,8 +19,8 @@ public class BooksEntity
     public LanguageEntity Language { get; set; }
 
     public virtual ICollection<BookAuthorEntity>BookAuthors { get; set; }
-    //public List<OrderLineEntity> OrderLine { get; set; }
-    public string AppUserId { get; set; }
-    public AppUserEntity? AppUser { get; set; }
+    public List<OrderLineEntity> OrderLine { get; set; }
+    // public string AppUserId { get; set; }
+    // public AppUserEntity? AppUser { get; set; }
 
 }

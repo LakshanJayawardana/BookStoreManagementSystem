@@ -13,6 +13,12 @@ public class ApplicationDbContext : IdentityDbContext<AppUserEntity>
     public DbSet<BookAuthorEntity> BookAuthors { get; set; }
     public DbSet<PublisherEntity> Publishers { get; set; }
     public DbSet<LanguageEntity> Languages { get; set; }
+    public DbSet<OrderLineEntity> OrderLines { get; set; }
+    public DbSet<CustomerOrderEntity> CustomerOrders { get; set; }
+    public DbSet<ShippingMethodEntity> ShippingMethods { get; set; }
+    public DbSet<OrderHistoryEntity> OrderHistories { get; set; }
+    public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
