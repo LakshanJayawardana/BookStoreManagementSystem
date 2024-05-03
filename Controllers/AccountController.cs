@@ -20,7 +20,8 @@ public class AccountController : Controller
     }
     public IActionResult Login()
     {
-        return View();
+        var response = new LoginViewModel();
+        return View(response);
     }
 
     [HttpPost]
